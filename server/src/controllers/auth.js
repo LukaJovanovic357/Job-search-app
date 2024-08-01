@@ -46,4 +46,33 @@ const login = async (req, res) => {
     });
 };
 
-export { login, register };
+const updateUser = async (req, res) => {
+    const { name, email, location, lastName } = req.body;
+
+    if (!name || !email || !location || !lastName) {
+        throw new BadRequestError('Please provide all required values');
+    }
+
+    const user = await User.findOne({ _id: req.user.userId });
+
+    user.name = name;
+    user.email = email;
+    user.location = location;
+    user.lastName = lastName;
+
+    await user.save();
+
+    const token = user.createJWT();
+
+    res.status(StatusCodes.OK).json({
+        user: {
+            email: user.email,
+            lastName: user.lastName,
+            location: user.location,
+            name: user.name,
+            token
+        }
+    });
+};
+
+export { login, register, updateUser };
