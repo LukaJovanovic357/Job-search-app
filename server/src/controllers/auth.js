@@ -5,7 +5,15 @@ import { BadRequestError, UnauthenticatedError } from '../errors/index.js';
 const register = async (req, res) => {
     const user = await User.create({ ...req.body });
     const token = user.createJWT();
-    res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });
+    res.status(StatusCodes.CREATED).json({
+        user: {
+            email: user.email,
+            lastName: user.lastName,
+            location: user.location,
+            name: user.name,
+            token
+        }
+    });
 };
 
 const login = async (req, res) => {
@@ -27,7 +35,15 @@ const login = async (req, res) => {
     }
     const token = user.createJWT();
 
-    res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
+    res.status(StatusCodes.OK).json({
+        user: {
+            email: user.email,
+            lastName: user.lastName,
+            location: user.location,
+            name: user.name,
+            token
+        }
+    });
 };
 
 export { login, register };
