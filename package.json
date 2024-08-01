@@ -1,0 +1,19 @@
+{
+    "name": "job-search-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "start:client": "npm --workspace=client start",
+        "start:server": "npm --workspace=server start",
+        "start": "npm run start:client & npm run start:server"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "workspaces": [
+        "./server",
+        "./client"
+    ]
+}
