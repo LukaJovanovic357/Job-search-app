@@ -4,6 +4,8 @@ import { NotFoundError } from '../errors/not-found.js';
 import Job from '../models/Job.js';
 
 const getAllJobs = async (req, res) => {
+    console.log(req.query);
+
     const jobs = await Job.find({ createdBy: req.user.userId }).sort(
         'createdAt'
     );
