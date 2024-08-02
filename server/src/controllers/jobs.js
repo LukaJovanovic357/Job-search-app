@@ -6,19 +6,42 @@ import Job from '../models/Job.js';
 const getAllJobs = async (req, res) => {
     const { search, status, jobType, sort } = req.query;
 
-    console.log('res.query:', req.query);
-
     const queryObject = {
         createdBy: req.user.userId
     };
-
-    console.log('query object:', queryObject);
 
     if (search) {
         queryObject.position = { $regex: search, $options: 'i' };
     }
 
+    if (status && status !== 'all') {
+        queryObject.status = status;
+    }
+
+    if (jobType && jobType !== 'all') {
+        queryObject.jobType = jobType;
+    }
+
     let result = Job.find(queryObject);
+
+    if (sort === 'latest') {
+        result = result.sort('-createdAt');
+    }
+
+    switch (sort) {
+        case 'latest':
+            result = result.sort('-createdAt');
+            break;
+        case 'oldest':
+            result = result.sort('createdAt');
+            break;
+        case 'a-z':
+            result = result.sort('position');
+            break;
+        case 'z-a':
+            result = result.sort('-position');
+            break;
+    }
 
     let jobs = await result;
     res.status(StatusCodes.OK).json({ jobs });
