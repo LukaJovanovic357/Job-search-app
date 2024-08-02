@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { BadRequestError } from '../errors/bad-request.js';
 import { NotFoundError } from '../errors/not-found.js';
-import Job from '../models/Job.js';
+import { testUser } from '../middleware/testUser.js';
 
 const getAllJobs = async (req, res) => {
     const { search, status, jobType, sort } = req.query;
