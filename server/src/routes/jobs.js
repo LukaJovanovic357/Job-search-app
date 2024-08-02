@@ -1,4 +1,5 @@
 import express from 'express';
+import { testUser } from '../middleware/testUser.js';
 
 import {
     getAllJobs,
@@ -10,7 +11,11 @@ import {
 
 const router = express.Router();
 
-router.route('/').post(createJob).get(getAllJobs);
-router.route('/:id').get(getJob).delete(deleteJob).patch(updateJob);
+router.route('/').post(testUser, createJob).get(getAllJobs);
+router
+    .route('/:id')
+    .get(getJob)
+    .delete(testUser, deleteJob)
+    .patch(testUser, updateJob);
 
 export default router;
