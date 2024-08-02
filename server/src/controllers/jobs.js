@@ -4,13 +4,24 @@ import { NotFoundError } from '../errors/not-found.js';
 import Job from '../models/Job.js';
 
 const getAllJobs = async (req, res) => {
-    console.log(req.query);
+    const { search, status, jobType, sort } = req.query;
 
-    const jobs = await Job.find({ createdBy: req.user.userId }).sort(
-        'createdAt'
-    );
+    console.log('res.query:', req.query);
 
-    res.status(StatusCodes.OK).json({ jobs, count: jobs.length });
+    const queryObject = {
+        createdBy: req.user.userId
+    };
+
+    console.log('query object:', queryObject);
+
+    if (search) {
+        queryObject.position = { $regex: search, $options: 'i' };
+    }
+
+    let result = Job.find(queryObject);
+
+    let jobs = await result;
+    res.status(StatusCodes.OK).json({ jobs });
 };
 
 const getJob = async (req, res) => {
