@@ -19,3 +19,4 @@ router.post('/login', login);
 router.patch('/updateUser', authenticateUser, testUser, updateUser);
 
 export default router;
+
