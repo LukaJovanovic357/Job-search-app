@@ -1,5 +1,5 @@
 import express from 'express';
-import { testUser } from '../middleware/testUser.js';
+import { testUser } from '../middleware/testUser';
 
 import {
     getAllJobs,
@@ -7,7 +7,7 @@ import {
     createJob,
     updateJob,
     deleteJob
-} from '../controllers/jobs.js';
+} from '../controllers/jobs';
 
 const router = express.Router();
 

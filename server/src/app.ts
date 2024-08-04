@@ -1,23 +1,21 @@
 import 'express-async-errors';
-import express from 'express';
-import { notFound as notFoundMiddleware } from './middleware/index.js';
-import { errorHandlerMiddleware } from './middleware/index.js';
-import jobsRouter from './routes/jobs.js';
-import authRouter from './routes/auth.js';
-import connectDB from './db/connect.js';
-import { authentication as authenticateUser } from './middleware/index.js';
-import MONGO_URI from './db/mongoURI.js';
+import express, { Response } from 'express';
+import { notFound as notFoundMiddleware } from './middleware/index';
+import { errorHandlerMiddleware } from './middleware/index';
+import jobsRouter from './routes/jobs';
+import authRouter from './routes/auth';
+import connectDB from './db/connect';
+import { authentication as authenticateUser } from './middleware/index';
+import MONGO_URI from './db/mongoURI';
 
 const app = express();
 
 app.use(express.json());
-// extra packages
 
-// routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
-app.get('/', (_, res) => {
+app.get('/', (_, res: Response) => {
     res.send('jobs api');
 });
 

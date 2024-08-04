@@ -1,10 +1,13 @@
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UnauthenticatedError } from '../errors/index.js';
+import { UnauthenticatedError } from '../errors/index';
 import 'dotenv/config';
 
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const authentication = async (req, res, next) => {
+const authentication = async (
+    req: Request,
+    _: Response,
+    next: NextFunction
+) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer')) {
@@ -14,7 +17,10 @@ const authentication = async (req, res, next) => {
     const token = authHeader.split(' ')[1];
 
     try {
-        const payload = jwt.verify(token, SECRET_KEY);
+        const payload = jwt.verify(
+            token,
+            process.env.SECRET_KEY!
+        ) as jwt.JwtPayload;
         const testUser = payload.userId === '66aba07c4527a58878de65ea';
         req.user = { userId: payload.userId, testUser };
         next();

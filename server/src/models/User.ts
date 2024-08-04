@@ -1,11 +1,21 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY as string;
 
-const UserSchema = new mongoose.Schema({
+export interface IUser extends Document {
+    name: string;
+    email: string;
+    password: string;
+    lastName: string;
+    location: string;
+    createJWT: () => string;
+    comparePassword: (candidatePassword: string) => Promise<boolean>;
+}
+
+const UserSchema: Schema<IUser> = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please provide name'],
@@ -52,7 +62,6 @@ UserSchema.methods.createJWT = function () {
 };
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-    console.log(candidatePassword, this.password);
     const isMatch = await bcrypt.compare(candidatePassword, this.password);
     return isMatch;
 };

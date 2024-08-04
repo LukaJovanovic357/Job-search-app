@@ -4,6 +4,6 @@ config({
     path: '../../../server/.env'
 });
 
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = process.env.MONGO_URI as string;
 
 export default MONGO_URI;

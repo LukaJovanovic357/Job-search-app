@@ -1,6 +1,20 @@
+import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-const errorHandlerMiddleware = (err, req, res, next) => {
+interface CustomError extends Error {
+    statusCode?: number;
+    code?: number;
+    keyValue?: any;
+    errors?: Record<string, any>;
+    value?: string;
+}
+
+const errorHandlerMiddleware = (
+    err: CustomError,
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     let customError = {
         statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
         msg: err.message || 'Something went wrong try again later'
@@ -13,10 +27,18 @@ const errorHandlerMiddleware = (err, req, res, next) => {
         customError.statusCode = 400;
     }
 
+    // if (err.name === 'ValidationError') {
+    //     customError.msg = Object.values(err.errors)
+    //         .map(item => item.message)
+    //         .join(', ');
+    //     customError.statusCode = 400;
+    // }
     if (err.name === 'ValidationError') {
-        customError.msg = Object.values(err.errors)
-            .map(item => item.message)
-            .join(', ');
+        customError.msg = err.errors
+            ? Object.values(err.errors)
+                  .map((item: any) => item.message)
+                  .join(', ')
+            : 'Validation error';
         customError.statusCode = 400;
     }
 

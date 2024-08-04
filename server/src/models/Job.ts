@@ -1,6 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
-const JobSchema = new mongoose.Schema(
+export interface IJob extends Document {
+    company: string;
+    position: string;
+    status: 'interview' | 'declined' | 'pending';
+    createdBy: mongoose.Types.ObjectId;
+    jobType: 'full-time' | 'part-time' | 'remote' | 'internship';
+    jobLocation: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const JobSchema: Schema<IJob> = new mongoose.Schema(
     {
         company: {
             type: String,
@@ -9,7 +20,7 @@ const JobSchema = new mongoose.Schema(
         },
         position: {
             type: String,
-            required: [true, 'Plaese provide company name'],
+            required: [true, 'Plaese provide position name'],
             maxlength: 100
         },
         status: {
@@ -36,5 +47,5 @@ const JobSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Job = mongoose.model('Job', JobSchema);
+const Job: Model<IJob> = mongoose.model('Job', JobSchema);
 export default Job;

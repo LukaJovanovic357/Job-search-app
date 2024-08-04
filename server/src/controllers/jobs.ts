@@ -1,13 +1,16 @@
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError } from '../errors/bad-request.js';
-import { NotFoundError } from '../errors/not-found.js';
-import { testUser } from '../middleware/testUser.js';
+import { BadRequestError } from '../errors/bad-request';
+import { NotFoundError } from '../errors/not-found';
+import Job from '../models/Job';
 
-const getAllJobs = async (req, res) => {
+const getAllJobs = async (req: Request, res: Response) => {
     const { search, status, jobType, sort } = req.query;
 
-    const queryObject = {
-        createdBy: req.user.userId
+    const userId = req.user!.userId;
+
+    const queryObject: any = {
+        createdBy: userId
     };
 
     if (search) {
@@ -23,10 +26,6 @@ const getAllJobs = async (req, res) => {
     }
 
     let result = Job.find(queryObject);
-
-    if (sort === 'latest') {
-        result = result.sort('-createdAt');
-    }
 
     switch (sort) {
         case 'latest':
@@ -49,19 +48,21 @@ const getAllJobs = async (req, res) => {
 
     result = result.skip(skip).limit(limit);
 
-    let jobs = await result;
-
+    const jobs = await result;
     const totalJobs = await Job.countDocuments(queryObject);
     const numOfPages = Math.ceil(totalJobs / limit);
 
     res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages });
 };
 
-const getJob = async (req, res) => {
-    const {
-        user: { userId },
-        params: { id: jobId }
-    } = req;
+const getJob = async (req: Request, res: Response) => {
+    // const {
+    //     user: { userId },
+    //     params: { id: jobId }
+    // } = req;
+
+    const userId = req.user!.userId;
+    const { id: jobId } = req.params;
 
     const job = await Job.findOne({
         _id: jobId,
@@ -75,18 +76,22 @@ const getJob = async (req, res) => {
     res.status(StatusCodes.OK).json({ job });
 };
 
-const createJob = async (req, res) => {
-    req.body.createdBy = req.user.userId;
+const createJob = async (req: Request, res: Response) => {
+    req.body.createdBy = req.user!.userId;
     const job = await Job.create(req.body);
     res.status(StatusCodes.CREATED).json({ job });
 };
 
-const updateJob = async (req, res) => {
-    const {
-        body: { company, position },
-        user: { userId },
-        params: { id: jobId }
-    } = req;
+const updateJob = async (req: Request, res: Response) => {
+    // const {
+    //     body: { company, position },
+    //     user: { userId },
+    //     params: { id: jobId }
+    // } = req;
+
+    const userId = req.user!.userId;
+    const { company, position } = req.body;
+    const { id: jobId } = req.params;
 
     if (!company || !position) {
         throw new BadRequestError('Company or Position fields cannot be empty');
@@ -105,11 +110,14 @@ const updateJob = async (req, res) => {
     res.status(StatusCodes.OK).json({ job });
 };
 
-const deleteJob = async (req, res) => {
-    const {
-        user: { userId },
-        params: { id: jobId }
-    } = req;
+const deleteJob = async (req: Request, res: Response) => {
+    // const {
+    //     user: { userId },
+    //     params: { id: jobId }
+    // } = req;
+
+    const userId = req.user!.userId;
+    const { id: jobId } = req.params;
 
     const job = await Job.findByIdAndDelete({
         _id: jobId,

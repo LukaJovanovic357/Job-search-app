@@ -1,8 +1,9 @@
-import User from '../models/User.js';
+import { Request, Response } from 'express';
+import User from '../models/User';
 import StatusCodes from 'http-status-codes';
 import { BadRequestError, UnauthenticatedError } from '../errors/index.js';
 
-const register = async (req, res) => {
+const register = async (req: Request, res: Response) => {
     const user = await User.create({ ...req.body });
     const token = user.createJWT();
     res.status(StatusCodes.CREATED).json({
@@ -16,7 +17,7 @@ const register = async (req, res) => {
     });
 };
 
-const login = async (req, res) => {
+const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -46,14 +47,14 @@ const login = async (req, res) => {
     });
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response) => {
     const { name, email, location, lastName } = req.body;
 
     if (!name || !email || !location || !lastName) {
         throw new BadRequestError('Please provide all required values');
     }
 
-    const user = await User.findOne({ _id: req.user.userId });
+    const user = await User.findOne({ _id: req.user!.userId });
 
     user.name = name;
     user.email = email;

@@ -1,7 +1,7 @@
-import mockData from './mock_data.json' assert { type: 'json' };
-import Job from './models/Job.js';
-import connectDB from './db/connect.js';
-import MONGO_URI from './db/mongoURI.js';
+import mockData from './mock_data.json';
+import Job from './models/Job';
+import connectDB from './db/connect';
+import MONGO_URI from './db/mongoURI';
 
 const start = async () => {
     try {
