@@ -1,3 +1,4 @@
+import { loadEnvFile } from 'process';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -6,7 +7,9 @@ export default defineConfig({
         environment: 'node',
         coverage: {
             reporter: ['text', 'json', 'html'],
-            provider: 'v8'
+            provider: 'v8',
+            include: ['**/src/**/*.ts'],
+            exclude: ['**/src/database/**', '**/src/entities/**']
         }
     }
 });
