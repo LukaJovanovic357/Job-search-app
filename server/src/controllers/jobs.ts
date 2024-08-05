@@ -27,19 +27,21 @@ const getAllJobs = async (req: Request, res: Response) => {
 
     let result = Job.find(queryObject);
 
-    switch (sort) {
-        case 'latest':
-            result = result.sort('-createdAt');
-            break;
-        case 'oldest':
-            result = result.sort('createdAt');
-            break;
-        case 'a-z':
-            result = result.sort('position');
-            break;
-        case 'z-a':
-            result = result.sort('-position');
-            break;
+    if (sort) {
+        switch (sort) {
+            case 'latest':
+                result = result.sort('-createdAt');
+                break;
+            case 'oldest':
+                result = result.sort('createdAt');
+                break;
+            case 'a-z':
+                result = result.sort('position');
+                break;
+            case 'z-a':
+                result = result.sort('-position');
+                break;
+        }
     }
 
     const page = Number(req.query.page) || 1;
@@ -56,11 +58,6 @@ const getAllJobs = async (req: Request, res: Response) => {
 };
 
 const getJob = async (req: Request, res: Response) => {
-    // const {
-    //     user: { userId },
-    //     params: { id: jobId }
-    // } = req;
-
     const userId = req.user!.userId;
     const { id: jobId } = req.params;
 
@@ -83,12 +80,6 @@ const createJob = async (req: Request, res: Response) => {
 };
 
 const updateJob = async (req: Request, res: Response) => {
-    // const {
-    //     body: { company, position },
-    //     user: { userId },
-    //     params: { id: jobId }
-    // } = req;
-
     const userId = req.user!.userId;
     const { company, position } = req.body;
     const { id: jobId } = req.params;
@@ -111,11 +102,6 @@ const updateJob = async (req: Request, res: Response) => {
 };
 
 const deleteJob = async (req: Request, res: Response) => {
-    // const {
-    //     user: { userId },
-    //     params: { id: jobId }
-    // } = req;
-
     const userId = req.user!.userId;
     const { id: jobId } = req.params;
 
