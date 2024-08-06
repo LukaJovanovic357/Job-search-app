@@ -112,4 +112,31 @@ describe('GET /api/v1/jobs', () => {
         expect(res.body.totalJobs).toEqual(20);
         expect(res.body.numOfPages).toEqual(2);
     });
+
+    it('should delete a job for the authenticated user', async () => {
+        const mockJobId = 'validJobId';
+
+        (Job.findByIdAndDelete as unknown as vi.Mock).mockResolvedValue({
+            _id: mockJobId,
+            createdBy: 'validUserId'
+        });
+
+        const res = await request(app)
+            .delete(`/api/v1/jobs/${mockJobId}`)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);
+    });
+
+    it('should return 404 if the job does not exist', async () => {
+        const mockJobId = 'nonExistentJobId';
+
+        (Job.findByIdAndDelete as unknown as vi.Mock).mockResolvedValue(null);
+
+        const res = await request(app)
+            .delete(`/api/v1/jobs/${mockJobId}`)
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(404);
+    });
 });

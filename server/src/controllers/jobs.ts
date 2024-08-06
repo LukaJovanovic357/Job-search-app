@@ -117,4 +117,11 @@ const deleteJob = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).send();
 };
 
-export { getAllJobs, getJob, createJob, updateJob, deleteJob };
+const showStats = async (req: Request, res: Response) => {
+    res.status(StatusCodes.OK).json({
+        defaultStats: {},
+        monthlyApplications: []
+    });
+};
+
+export { getAllJobs, getJob, createJob, updateJob, deleteJob, showStats };
