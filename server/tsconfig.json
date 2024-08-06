@@ -10,30 +10,8 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "typeRoots": ["./node_modules/@types"],
-        "types": ["vitest"]
+        "types": ["vitest/globals"]
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts"],
     "exclude": ["node_modules"]
 }
-
-// {
-//     "compilerOptions": {
-//         "module": "ES2022",
-//         "target": "ES2022",
-//         "moduleResolution": "Node",
-//         "resolveJsonModule": true,
-//         "strict": true,
-//         "esModuleInterop": true,
-//         "skipLibCheck": true,
-//         "outDir": "./dist",
-//         "rootDir": "./src",
-//         "typeRoots": ["./node_modules/@types"],
-//         "types": ["vitest/globals"],
-//         "paths": {
-//             "@server/*": ["./src/*"],
-//             "@tests/*": ["./tests/*"]
-//         }
-//     },
-//     "include": ["src/**/*.ts", "src/**/*.d.ts", "tests/**/*.ts"],
-//     "exclude": ["node_modules"]
-// }
