@@ -2,11 +2,11 @@ import express from 'express';
 import { testUser } from '../middleware/testUser';
 
 import {
-    getAllJobs,
-    getJob,
     createJob,
-    updateJob,
     deleteJob,
+    getAllJobs,
+    updateJob,
+    getJob,
     showStats
 } from '../controllers/jobs';
 
